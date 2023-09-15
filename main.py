@@ -1,4 +1,4 @@
-basic.forever(function on_forever() {
+def on_forever():
     led.plot(0, 0)
     basic.pause(100)
     led.unplot(0, 0)
@@ -74,4 +74,4 @@ basic.forever(function on_forever() {
     led.plot(4, 4)
     basic.pause(100)
     led.unplot(4, 4)
-})
+basic.forever(on_forever)
