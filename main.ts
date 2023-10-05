@@ -4,13 +4,14 @@ let block_y = -1
 let next_block_x = -1
 let next_block_y = -1
 // led.plot(0, 0)
-// basic.show_leds("""
-//  # # # #
-//  # # # #
-//  # # # #
-//  # # # #
-//  # # # #
-// """)
+let tetris_highscore = 0
+basic.showLeds(`
+. . . . .
+# # # # #
+# # # # #
+# # # # #
+# # # # #
+`)
 loops.everyInterval(100, function onEvery_rendering() {
     
     if (next_block_x == -1 && next_block_y == -1) {
@@ -19,11 +20,15 @@ loops.everyInterval(100, function onEvery_rendering() {
         if (led.point(next_block_x, next_block_y)) {
             music.playTone(Note.D, 2000)
             //  count + highscore
-            basic.showString("hi!")
+            basic.showNumber(tetris_highscore)
+            control.waitForEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, ButtonEvent.Click)
+            basic.clearScreen()
+        } else {
+            //  stop the other things
+            tetris_highscore = tetris_highscore + 1
         }
         
     } else {
-        //  stop the other things
         led.unplot(block_x, block_y)
         
     }
@@ -68,7 +73,7 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function on_button_event
     }
     
 })
-input.onButtonEvent(Button.B, input.buttonEventClick(), function on_button_event_b() {
+function on_button_event_b() {
     
     let potential_block_x = -1
     if (block_x == 4) {
@@ -83,4 +88,7 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function on_button_event
         music.playTone(Note.A5, 10)
     }
     
-})
+}
+
+input.onButtonEvent(Button.B, input.buttonEventClick(), on_button_event_b)
+input.onButtonEvent(Button.AB, input.buttonEventClick(), on_button_event_b)

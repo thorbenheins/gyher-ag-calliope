@@ -4,17 +4,18 @@ block_y = -1
 next_block_x = -1
 next_block_y = -1
 #led.plot(0, 0)
+tetris_highscore = 0
 
-#basic.show_leds("""
+basic.show_leds("""
+. . . . .
 # # # # #
 # # # # #
 # # # # #
 # # # # #
-# # # # #
-#""")
+""")
 
 def onEvery_rendering():
-    global block_x, block_y, next_block_x, next_block_y
+    global block_x, block_y, next_block_x, next_block_y, tetris_highscore
     
     if (next_block_x == -1 and next_block_y == -1): 
         next_block_x = randint(0, 4)
@@ -22,8 +23,12 @@ def onEvery_rendering():
         if (led.point(next_block_x, next_block_y)):
             music.play_tone(Note.D, 2000)
             # count + highscore
-            basic.show_string("hi!")
+            basic.show_number(tetris_highscore)
+            control.wait_for_event(EventBusSource.MICROBIT_ID_BUTTON_AB, ButtonEvent.CLICK)
+            basic.clear_screen()
             # stop the other things
+        else:
+            tetris_highscore = tetris_highscore + 1
     else:
         led.unplot(block_x, block_y)
         pass#music.play_tone(Note.C5, 10)
@@ -84,3 +89,4 @@ def on_button_event_b():
         music.play_tone(Note.A5, 10)
 
 input.on_button_event(Button.B, input.button_event_click(), on_button_event_b)
+input.on_button_event(Button.AB, input.button_event_click(), on_button_event_b)
